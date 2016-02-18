@@ -15,20 +15,20 @@ const interfaceName = "Wi-Fi";
 function Player (x, y) {
 	this.x = x;
 	this.y = y;
-	this.a = 0;
+	this.a = 0.0;
 }
 
-Player.prototype.turnLeft = () => {
-	this.a += -4.0;
+Player.prototype.turnLeft = function () {
+	this.a += -8.0;
 }
 
-Player.prototype.turnRight = () => {
-	this.a += 4.0;
+Player.prototype.turnRight = function () {
+	this.a += 8.0;
 }
 
-Player.prototype.accelerate = () => {
+Player.prototype.accelerate = function () {
 	const PI = 3.14159;
-	let rotation = this.angle * 180.0/PI;
+	let rotation = this.a*PI/180.0;
 	this.x += Math.cos(rotation) * 8.0;
 	this.y += Math.sin(rotation) * 8.0;
 }
@@ -54,17 +54,14 @@ io.on("connection", function (socket){
 	console.log(players);
 	
 	socket.on ("accelerate", (player) => {
-		console.log(player.id, "accelerates!");
 		players[player.id].accelerate();
 	});
 	
 	socket.on ("turnLeft", (player) => {
-		console.log(player.id, "accelerates!");
 		players[player.id].turnLeft();
 	});
 	
 	socket.on ("turnRight", (player) => {
-		console.log(player.id, "accelerates!");
 		players[player.id].turnRight();
 	});
 

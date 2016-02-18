@@ -1,16 +1,19 @@
 var socket = io.connect();
 
 socket.on('updateClient', function (players) {
-	//here update client sprites
-	/*
 	var keys = Object.keys(players);
-	console.log(keys);
-	for (var i = 0; i < keys.length; i++){
-		var car = cars[keys[i]];
-		var player = players[keys[i]];
-		//console.log(car, player);
+	var keysLength = keys.length;
+	for (var i = 0; i < keysLength; i++){
+		var key = keys[i];
+		if (typeof cars[key] === "undefined"){
+			createCar(key);
+		}
+		var player = players[key];
+		var car = cars[key];
+		car.angle = player.a;
+		car.position.x = player.x;
+		car.position.y = player.y;
 	}
-	*/
 });
 
 socket.on("connection", function (socket) {
