@@ -5,6 +5,9 @@ var socket = null;
 function preload() {
 	game.load.image("background", "background.png");
 	game.load.image("car", "coche.png");
+	game.load.image("cat1", "cat1.png");
+	game.load.image("cat2", "cat2.png");
+	game.load.image("cat3", "cat3.png");
 }
 
 function createCar (id, tint) {
@@ -16,6 +19,9 @@ function createCar (id, tint) {
 function create () {
 	cursors = game.input.keyboard.createCursorKeys();
 	game.add.image(0,0, "background");
+	var cat = game.add.image(0,0, "cat1");
+	//cat.animations.add("alive", ["cat1", "cat2", "cat3"], 24, true);
+	console.log("cat animation", cat);
 	
 	socket = io.connect();
 
