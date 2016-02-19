@@ -1,31 +1,11 @@
-var socket = io.connect();
 
-socket.on('updateClient', function (players) {
-	var keys = Object.keys(players);
-	var keysLength = keys.length;
-	for (var i = 0; i < keysLength; i++){
-		var key = keys[i];
-		if (typeof cars[key] === "undefined"){
-			createCar(key);
-		}
-		var player = players[key];
-		var car = cars[key];
-		car.angle = player.a;
-		car.position.x = player.x;
-		car.position.y = player.y;
-	}
-});
-
-socket.on("connection", function (socket) {
-	console.log("Client id", socket);
-});
+var cars = {};
+var socket = null;
 
 function preload() {
 	game.load.image("background", "background.png");
 	game.load.image("car", "coche.png");
 }
-
-var cars = {};
 
 function createCar (id) {
 	cars[id] = game.add.sprite(400, 300, "car");
@@ -36,6 +16,52 @@ function create () {
 	cursors = game.input.keyboard.createCursorKeys();
 	game.add.image(0,0, "background");
 	//car.tint = Math.random * Math.pow(2, 32);
+	
+	socket = io.connect();
+
+	$(window).bind ("beforeunload", function () {
+		socket.emit("kill", {id: socket.id});
+	});
+
+	socket.on('updateClient', function (players) {
+		var playerKeys = Object.keys(players);
+		var playerKeysLength = playerKeys.length;
+		
+		var carKeys = Object.keys(cars);
+		var carKeysLength = carKeys.length;
+		
+		//console.log("car", carKeysLength);
+		//console.log("player", playerKeysLength);
+		//destroy client sprites that don't exist on server
+		if (playerKeysLength < carKeysLength){
+			console.log("destroy %d sprite", carKeysLength - playerKeysLength);
+			for (var i = 0; i < carKeysLength; i++){
+				var key = carKeys[i];
+				if (typeof players[key] === 'undefined'){
+					cars[key].destroy();
+					delete cars[key];
+				}
+			}
+		}
+		
+		//create and update cars
+		for (var i = 0; i < playerKeysLength; i++){
+			var key = playerKeys[i];
+			if (typeof cars[key] === "undefined"){
+				createCar(key);
+			}
+			var player = players[key];
+			var car = cars[key];
+			car.angle = player.a;
+			car.position.x = player.x;
+			car.position.y = player.y;
+		}
+	});
+
+	socket.on("connection", function (socket) {
+		console.log("Client id", socket);
+	});
+		
 }
 
 function update () {

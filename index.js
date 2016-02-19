@@ -10,8 +10,6 @@ var io = require("socket.io")(server);
 const indexHTML = "./index.html";
 var index = fs.readFileSync(indexHTML);
 
-const interfaceName = "Wi-Fi";
-
 function Player (x, y) {
 	this.x = x;
 	this.y = y;
@@ -49,8 +47,9 @@ fs.watch(indexHTML, function(event, filename) {
 app.get("/", handler);
 
 io.on("connection", function (socket){
-	console.log(socket.id);
+	console.log("new player", socket.id);
 	players[socket.id.replace(/\/#/, "")] = new Player(400.0, 300.0);
+	console.log("PLAYERS");
 	console.log(players);
 	
 	socket.on ("accelerate", (player) => {
@@ -65,6 +64,13 @@ io.on("connection", function (socket){
 		players[player.id].turnRight();
 	});
 
+	socket.on ("kill", (player) => {
+		console.log("kill", player.id);
+		delete players[player.id];
+		console.log("PLAYERS");
+		console.log(players);
+	});
+	
 });
 
 function updateClients(players, io) {
