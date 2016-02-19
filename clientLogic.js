@@ -7,15 +7,15 @@ function preload() {
 	game.load.image("car", "coche.png");
 }
 
-function createCar (id) {
+function createCar (id, tint) {
 	cars[id] = game.add.sprite(400, 300, "car");
 	cars[id].pivot = new Phaser.Point(16.0, 16.0);
+	cars[id].tint = isNaN(tint) ? 0xFFFFFF : tint ;
 }
 
 function create () {
 	cursors = game.input.keyboard.createCursorKeys();
 	game.add.image(0,0, "background");
-	//car.tint = Math.random * Math.pow(2, 32);
 	
 	socket = io.connect();
 
@@ -29,9 +29,7 @@ function create () {
 		
 		var carKeys = Object.keys(cars);
 		var carKeysLength = carKeys.length;
-		
-		//console.log("car", carKeysLength);
-		//console.log("player", playerKeysLength);
+
 		//destroy client sprites that don't exist on server
 		if (playerKeysLength < carKeysLength){
 			console.log("destroy %d sprite", carKeysLength - playerKeysLength);
@@ -48,7 +46,12 @@ function create () {
 		for (var i = 0; i < playerKeysLength; i++){
 			var key = playerKeys[i];
 			if (typeof cars[key] === "undefined"){
-				createCar(key);
+				if (key === socket.id){
+					createCar(key, Math.random() * Math.pow(2, 32));
+				}else{
+					createCar(key);
+				}
+				
 			}
 			var player = players[key];
 			var car = cars[key];
