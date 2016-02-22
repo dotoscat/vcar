@@ -51,8 +51,9 @@ fs.watch(indexHTML, function(event, filename) {
 
 app.get("/", handler);
 
-io.on("connection", function (socket){
+io.on("connection", function (socket, playerData){
 	console.log("new player", socket.id);
+	console.log(playerData);
 	players[socket.id.replace(/\/#/, "")] = new Player(400.0, 300.0);
 	console.log("PLAYERS");
 	console.log(players);

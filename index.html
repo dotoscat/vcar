@@ -6,12 +6,25 @@
 		<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<link rel="stylesheet" type="text/css" href="appStyle.css">
+		<script>
+		$(window).keydown (function (event){
+			if (event.keyCode === 13){
+				event.preventDefault();
+				return false;
+			}
+		});
+		</script>
     </head>
     <body>
 		<p>Source code is <a href="https://github.com/otrianodev/vcar">here</a></p>
 		<p><a href="https://twitter.com/otrianodev">Follow me</a> on twitter = ' ^ ' = </p>
+		<form id="createPlayer" method="post">
+		<label for="playerName">Your name</label><input id="playerName" type="text" name="playerName" maxlength="16" />
+		<label for="playerColor">Your car color</label><input id="playerColor" type="color" name="playerColor" />
+		<input id="sendToGame" type="button" value="Play now!" />
+		</form>
+		<aside id="box"></aside>
 		<script src="phaser.js"></script>
 		<script src="clientLogic.js"></script>
-		<aside id="box"></aside>
     </body>
 </html>
