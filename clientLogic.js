@@ -19,9 +19,23 @@ function createCar (id, tint) {
 function create () {
 	cursors = game.input.keyboard.createCursorKeys();
 	game.add.image(0,0, "background");
-	var cat = game.add.image(0,0, "cat1");
-	//cat.animations.add("alive", ["cat1", "cat2", "cat3"], 24, true);
-	console.log("cat animation", cat);
+	
+	var cat1 = game.make.sprite(0,0,"cat1");
+	var cat2 = game.make.sprite(0,0,"cat2");
+	var cat3 = game.make.sprite(0,0,"cat3");
+	var sheet = game.add.bitmapData(320*3, 240);
+	sheet.draw(cat1, 0, 0);
+	sheet.draw(cat2, 320, 0);
+	sheet.draw(cat3, 320*2, 0);
+	
+	//game.add.image(0, 0, sheet);
+	game.cache.addSpriteSheet("aliveCat", "", sheet.canvas, 320, 240, 3, 0, 0);
+	
+	var cat = game.add.sprite(0, 0, "aliveCat");
+	cat.animations.add("alive");
+	cat.play("alive", 12, true);
+	cat.scale.set(0.5, 0.5);
+	cat.position.set(160, 160);
 	
 	socket = io.connect();
 
