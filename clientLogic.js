@@ -66,12 +66,7 @@ function create () {
 		for (var i = 0; i < playerKeysLength; i++){
 			var key = playerKeys[i];
 			if (typeof cars[key] === "undefined"){
-				if (key === socket.id){
-					createCar(key, Math.random() * Math.pow(2, 32));
-				}else{
-					createCar(key);
-				}
-				
+				createCar(key, players[key].t);
 			}
 			var player = players[key];
 			var car = cars[key];

@@ -14,6 +14,7 @@ function Player (x, y) {
 	this.x = x;
 	this.y = y;
 	this.a = 0.0;
+	this.t = Math.random() * Math.pow(2, 32);
 }
 
 Player.prototype.turnLeft = function () {
