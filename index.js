@@ -10,11 +10,15 @@ var io = require("socket.io")(server);
 const indexHTML = "./index.html";
 var index = fs.readFileSync(indexHTML);
 
+var nPlayer = 1;
+
 function Player (x, y) {
 	this.x = x;
 	this.y = y;
 	this.a = 0.0;
 	this.t = Math.random() * Math.pow(2, 32);
+	this.n = "Player_"+nPlayer;
+	nPlayer++;
 }
 
 Player.prototype.turnLeft = function () {

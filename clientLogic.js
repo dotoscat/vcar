@@ -2,6 +2,8 @@
 var cars = {};
 var socket = null;
 
+var style = { font: "16px Arial", fill: "0xFFFFFF", align: "center"};
+
 function preload() {
 	game.load.image("background", "background.png");
 	game.load.image("car", "coche.png");
@@ -10,10 +12,11 @@ function preload() {
 	game.load.image("cat3", "cat3.png");
 }
 
-function createCar (id, tint) {
+function createCar (id, tint, text) {
 	cars[id] = game.add.sprite(400, 300, "car");
 	cars[id].pivot = new Phaser.Point(16.0, 16.0);
 	cars[id].tint = isNaN(tint) ? 0xFFFFFF : tint ;
+	cars[id].addChild(game.make.text(0,-32, text, style));
 }
 
 function create () {
@@ -66,7 +69,7 @@ function create () {
 		for (var i = 0; i < playerKeysLength; i++){
 			var key = playerKeys[i];
 			if (typeof cars[key] === "undefined"){
-				createCar(key, players[key].t);
+				createCar(key, players[key].t, players[key].n);
 			}
 			var player = players[key];
 			var car = cars[key];
@@ -99,4 +102,4 @@ function update () {
 
 var state = {preload: preload, create: create, update: update};
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, "", state, false, false);
+var game = new Phaser.Game(800, 600, Phaser.AUTO, "box", state, false, false);
