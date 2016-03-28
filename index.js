@@ -12,12 +12,12 @@ var index = fs.readFileSync(indexHTML);
 
 var nPlayer = 1;
 
-function Player (x, y) {
+function Player (x, y, name, color) {
 	this.x = x;
 	this.y = y;
 	this.a = 0.0;
-	this.t = Math.random() * Math.pow(2, 32);
-	this.n = "Player_"+nPlayer;
+	this.t = color;
+	this.n = name;
 	nPlayer++;
 }
 
@@ -51,11 +51,13 @@ fs.watch(indexHTML, function(event, filename) {
 app.get("/", handler);
 
 io.on("connection", function (socket, playerData){
-	console.log("new player", socket.id);
-	console.log(playerData);
-	players[socket.id.replace(/\/#/, "")] = new Player(400.0, 300.0);
 	console.log("PLAYERS");
 	console.log(players);
+	
+	socket.on ( "newPlayer", (playerData) => {
+		console.log(playerData);
+		players[socket.id.replace(/\/#/, "")] = new Player(400.0, 300.0, playerData.name, +("0x"+playerData.color.slice(1)));
+	} );
 	
 	socket.on ("accelerate", (player) => {
 		players[player.id].accelerate();
@@ -75,7 +77,6 @@ io.on("connection", function (socket, playerData){
 		console.log("PLAYERS");
 		console.log(players);
 	});
-	
 });
 
 function updateClients(players, io) {

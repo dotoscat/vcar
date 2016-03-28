@@ -21,15 +21,15 @@ sendToGame.click( function () {
 	
 	console.log(color, name);
 	
-	socket = io.connect({color: color, name: name});
-	socket.on("connect", function (socket) {
-		console.log("send data to server!");
+	socket = io.connect();
+	socket.on("connect", function () {
+		console.log("Client connected");
+		socket.emit("newPlayer", {color: color, name: name});
+		$(window).bind ("beforeunload", function () {
+			socket.emit("kill", {id: socket.id});
+		});
 	});
 	
-	$(window).bind ("beforeunload", function () {
-		socket.emit("kill", {id: socket.id});
-	});
-
 	socket.on('updateClient', function (players) {
 		var playerKeys = Object.keys(players);
 		var playerKeysLength = playerKeys.length;
