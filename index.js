@@ -30,8 +30,7 @@ Player.prototype.turnRight = function () {
 }
 
 Player.prototype.accelerate = function () {
-	const PI = 3.14159;
-	let rotation = this.a*PI/180.0;
+	let rotation = this.a*Math.PI/180.0;
 	this.x += Math.cos(rotation) * 8.0;
 	this.y += Math.sin(rotation) * 8.0;
 }
